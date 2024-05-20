@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class GraphicsPanel extends JPanel {
     private BufferedImage background;
     private BufferedImage pig;
+    private BufferedImage cat;
 
     private boolean[] pressedKeys;
     private Timer timer;
@@ -18,7 +19,8 @@ public class GraphicsPanel extends JPanel {
     public GraphicsPanel(String name) {
         try {
             background = ImageIO.read(new File("src/dwasdwa.png"));
-            pig = ImageIO.read(new File ("src/predator1.png"));
+            pig = ImageIO.read(new File ("src/pig.png"));
+            cat = ImageIO.read(new File ("src/frame_0_delay-0.07s.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -33,7 +35,8 @@ public class GraphicsPanel extends JPanel {
         super.paintComponent(g);  // just do this
         g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(pig, 100, 100, null);
-            }
+        g.drawImage(cat, 200, 100, null);
+    }
 
 }
 
