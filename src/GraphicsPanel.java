@@ -1,19 +1,16 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
-    private Animation animate;
+    private Animation animateCat;
+    private Animation animatePig;
     private BufferedImage background;
-    private BufferedImage pig;
     private boolean[] pressedKeys;
-    private BufferedImage cat1;
-    private BufferedImage cat2;
     private Timer timer;
     private int time;
     private ArrayList<BufferedImage> pigFrames;
@@ -33,15 +30,16 @@ public class GraphicsPanel extends JPanel {
         time = 0;
         setFocusable(true); // this line of code + one below makes this panel active for keylistener events
         requestFocusInWindow(); // see comment above
-        animate = new Animation(catFrames, 1);
+        animateCat = new Animation(catFrames, 1);
+        animatePig = new Animation(pigFrames, 1);
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
         g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
-        g.drawImage(pig, 100, 100, null);
-        g.drawImage(animate.getActiveFrame(), 200, 100, null);
+        g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
+        g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
     }
 
     private void importImages(int startNum, int endNum, ArrayList<BufferedImage> list) {
