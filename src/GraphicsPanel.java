@@ -9,21 +9,22 @@ import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
     private BufferedImage background;
-    private BufferedImage pig;
-    private BufferedImage cat;
-
     private boolean[] pressedKeys;
     private Timer timer;
     private int time;
+    private ArrayList<BufferedImage> pigFrames;
+    private ArrayList<BufferedImage> catFrames;
 
     public GraphicsPanel(String name) {
         try {
             background = ImageIO.read(new File("src/assets/dwasdwa.png"));
-            pig = ImageIO.read(new File ("src/assets/pig.png"));
-            cat = ImageIO.read(new File ("src/assets/predator11.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        pigFrames = new ArrayList<>();
+        catFrames = new ArrayList<>();
+        importImages(1, 10, pigFrames);
+        importImages(11, 12, catFrames);
         pressedKeys = new boolean[128];
         time = 0;
         setFocusable(true); // this line of code + one below makes this panel active for keylistener events
@@ -34,8 +35,17 @@ public class GraphicsPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
         g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
-        g.drawImage(pig, 100, 100, null);
-        g.drawImage(cat, 200, 100, null);
+    }
+
+
+    private void importImages(int startNum, int endNum, ArrayList<BufferedImage> list) {
+        for (int i = startNum; i <= endNum; i++) {
+            try {
+                list.add(ImageIO.read(new File("src/assets/predator" + i + ".png")));
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
 }
