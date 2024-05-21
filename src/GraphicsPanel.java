@@ -22,9 +22,6 @@ public class GraphicsPanel extends JPanel {
     public GraphicsPanel(String name) {
         try {
             background = ImageIO.read(new File("src/assets/dwasdwa.png"));
-            pig = ImageIO.read(new File ("src/assets/pig.png"));
-            BufferedImage cat1 = ImageIO.read(new File ("src/assets/predator11.png"));
-            BufferedImage cat2 = ImageIO.read(new File ("src/assets/predator12.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -36,10 +33,7 @@ public class GraphicsPanel extends JPanel {
         time = 0;
         setFocusable(true); // this line of code + one below makes this panel active for keylistener events
         requestFocusInWindow(); // see comment above
-        ArrayList<BufferedImage> list = new ArrayList<>();
-        list.add(cat1);
-        list.add(cat2);
-        animate = new Animation(list, 1);
+        animate = new Animation(catFrames, 1);
     }
 
     @Override
