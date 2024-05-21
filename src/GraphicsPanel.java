@@ -18,7 +18,7 @@ public class GraphicsPanel extends JPanel {
 
     public GraphicsPanel(String name) {
         try {
-            background = ImageIO.read(new File("src/assets/dwasdwa.png"));
+            background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
