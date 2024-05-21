@@ -29,6 +29,8 @@ public class GraphicsPanel extends JPanel {
         pig2Frames = new ArrayList<>();
         importImages(1, 10, pigFrames);
         importImages(11, 12, catFrames);
+
+        importImages(13, 23, pig2Frames);
         pressedKeys = new boolean[128];
         time = 0;
         setFocusable(true); // this line of code + one below makes this panel active for keylistener events
