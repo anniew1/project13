@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class GraphicsPanel extends JPanel {
 
     public GraphicsPanel(String name) {
         try {
-            background = ImageIO.read(new File("src/assets/dwasdwa.png"));
+            background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -44,6 +43,7 @@ public class GraphicsPanel extends JPanel {
         super.paintComponent(g);  // just do this
         g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
+        g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
     }
 
