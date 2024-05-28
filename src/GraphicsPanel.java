@@ -1,12 +1,14 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GraphicsPanel extends JPanel {
+public class GraphicsPanel extends JPanel implements ActionListener implements MouseListener {
     private Animation animateCat;
     private Animation animatePig;
     private Animation animatePig2;
@@ -47,6 +49,7 @@ public class GraphicsPanel extends JPanel {
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
         g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
+
     }
 
     private void importImages(int startNum, int endNum, ArrayList<BufferedImage> list) {
@@ -59,6 +62,16 @@ public class GraphicsPanel extends JPanel {
         }
     }
 
+    public void mouseClicked(MouseEvent e) {
+        int x=e.getX();
+        int y=e.getY();
+        System.out.println(x+","+y);//these co-ords are relative to the component
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
 }
 
 
