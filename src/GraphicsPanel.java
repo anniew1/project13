@@ -1,12 +1,14 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GraphicsPanel extends JPanel {
+public class GraphicsPanel extends JPanel implements ActionListener implements MouseListener {
     private Animation animateCat;
     private Animation animatePig;
     private Animation animatePig2;
@@ -16,9 +18,8 @@ public class GraphicsPanel extends JPanel {
     private Timer timer;
     private int time;
     private ArrayList<BufferedImage> pigFrames;
-    private ArrayList<BufferedImage> catFrames;
-
     private ArrayList<BufferedImage> balloonFrames;
+    private ArrayList<BufferedImage> catFrames;
     private ArrayList<BufferedImage> pig2Frames;
 
     public GraphicsPanel(String name) {
@@ -30,10 +31,9 @@ public class GraphicsPanel extends JPanel {
         pigFrames = new ArrayList<>();
         catFrames = new ArrayList<>();
         pig2Frames = new ArrayList<>();
-        balloonFrames = new ArrayList<>();
         importImages(1, 10, pigFrames);
         importImages(11, 12, catFrames);
-        importImages(24, 42, balloonFrames);
+
         importImages(13, 23, pig2Frames);
         pressedKeys = new boolean[128];
         time = 0;
@@ -63,6 +63,16 @@ public class GraphicsPanel extends JPanel {
                 System.out.println(e.getMessage());
             }
         }
+    }
+    public void mouseClicked(MouseEvent e) {
+        int x=e.getX();
+        int y=e.getY();
+        System.out.println(x+","+y);//these co-ords are relative to the component
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
     }
 
 }
