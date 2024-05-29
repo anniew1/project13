@@ -26,28 +26,10 @@ public class Balloon extends Animation {
 
     public void move() {
         checkLocation();
-        if (turnNum == 0) {
+        if (turnNum % 2 == 0) {
             incrementY();
-        } else if (turnNum == 1) {
+        } else {
             incrementX();
-        } else if (turnNum == 2) {
-            incrementY();
-        } else if (turnNum == 3) {
-            incrementX();
-        } else if (turnNum == 4) {
-            incrementY();
-        } else if (turnNum == 5) {
-            incrementX();
-        } else if (turnNum == 6) {
-            incrementY();
-        } else if (turnNum == 7) {
-            incrementX();
-        } else if (turnNum == 8) {
-            incrementY();
-        } else if (turnNum == 9) {
-            incrementX();
-        } else if (turnNum == 10) {
-            incrementY();
         }
     }
 
@@ -68,3 +50,12 @@ public class Balloon extends Animation {
 
     }
 }
+
+
+
+
+
+
+
+
+
