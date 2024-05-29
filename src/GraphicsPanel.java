@@ -20,14 +20,21 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private ArrayList<BufferedImage> balloonFrames;
     private ArrayList<BufferedImage> catFrames;
     private ArrayList<BufferedImage> pig2Frames;
-    private ArrayList<Rectangle> invisibleRects;
+    private ArrayList<InvisibleRect> invisibleRects;
 
     public GraphicsPanel(String name) {
 
         invisibleRects = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            invisibleRects.add(new Rectangle(20, 20));
-        }
+        invisibleRects.add(new InvisibleRect(124, 85));
+        invisibleRects.add(new InvisibleRect(500, 82));
+        invisibleRects.add(new InvisibleRect(500, 212));
+        invisibleRects.add(new InvisibleRect(360, 207));
+        invisibleRects.add(new InvisibleRect(369, 362));
+        invisibleRects.add(new InvisibleRect(242, 360));
+        invisibleRects.add(new InvisibleRect(250, 487));
+        invisibleRects.add(new InvisibleRect(115, 488));
+        invisibleRects.add(new InvisibleRect(116, 618));
+        invisibleRects.add(new InvisibleRect(501, 612));
 
         try {
             background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
@@ -63,11 +70,17 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
+
+        for (int i = 0; i < invisibleRects.size(); i++) {
+            g.drawRect(invisibleRects.get(i).getX(), invisibleRects.get(i).getY(), 20, 20);
+        }
+
         g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
         g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
         g.drawImage(animateBalloon.getActiveFrame(), 400, 100, null);
+
     }
 
     @Override
@@ -128,6 +141,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             }
         }
     }
+
+
 }
 
 
