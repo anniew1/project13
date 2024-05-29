@@ -25,7 +25,6 @@ public class Balloon extends Animation {
     }
 
     public void move() {
-        checkLocation();
         if (turnNum % 2 == 0) {
             incrementY();
         } else {
@@ -46,8 +45,8 @@ public class Balloon extends Animation {
         y += 0.1;
     }
 
-    private void checkLocation() {
-
+    public void incrementTurnNum() {
+        turnNum++;
     }
 }
 

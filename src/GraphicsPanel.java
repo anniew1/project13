@@ -11,7 +11,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private Animation animateCat;
     private Animation animatePig;
     private Animation animatePig2;
-    private Animation animateBalloon;
+    private Animation animateBallon;
+    private ArrayList<Balloon> balloons;
     private BufferedImage background;
     private boolean[] pressedKeys;
     private Timer timer;
@@ -52,6 +53,9 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         importImages(13, 23, pig2Frames);
         importImages(24, 42, balloonFrames);
 
+        balloons = new ArrayList<>();
+        balloons.add(new Balloon(balloonFrames, 1));
+
         pressedKeys = new boolean[128];
         time = 0;
 
@@ -64,7 +68,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         animateCat = new Animation(catFrames, 1);
         animatePig = new Animation(pigFrames, 1);
         animatePig2 = new Animation(pig2Frames, 1);
-        animateBalloon = new Animation(balloonFrames, 1);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
         g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
-        g.drawImage(animateBalloon.getActiveFrame(), 400, 100, null);
+
 
     }
 
