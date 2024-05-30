@@ -11,12 +11,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private Animation animateCat;
     private Animation animatePig;
     private Animation animatePig2;
-    private Animation animateBallon;
     private ArrayList<Balloon> balloons;
     private BufferedImage background;
     private boolean[] pressedKeys;
     private Timer timer;
-    private int time;
+    private double time;
     private ArrayList<BufferedImage> pigFrames;
     private ArrayList<BufferedImage> balloonFrames;
     private ArrayList<BufferedImage> catFrames;
@@ -27,15 +26,15 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
         invisibleRects = new ArrayList<>();
         invisibleRects.add(new InvisibleRect(124, 85));
-        invisibleRects.add(new InvisibleRect(500, 82));
-        invisibleRects.add(new InvisibleRect(500, 212));
-        invisibleRects.add(new InvisibleRect(360, 207));
-        invisibleRects.add(new InvisibleRect(369, 362));
-        invisibleRects.add(new InvisibleRect(242, 360));
-        invisibleRects.add(new InvisibleRect(250, 487));
-        invisibleRects.add(new InvisibleRect(115, 488));
-        invisibleRects.add(new InvisibleRect(116, 618));
-        invisibleRects.add(new InvisibleRect(501, 612));
+        invisibleRects.add(new InvisibleRect(510, 82));
+        invisibleRects.add(new InvisibleRect(510, 222));
+        invisibleRects.add(new InvisibleRect(350, 207));
+        invisibleRects.add(new InvisibleRect(359, 362));
+        invisibleRects.add(new InvisibleRect(225, 360));
+        invisibleRects.add(new InvisibleRect(230, 497));
+        invisibleRects.add(new InvisibleRect(105, 488));
+        invisibleRects.add(new InvisibleRect(116, 630));
+        invisibleRects.add(new InvisibleRect(511, 612));
 
         try {
             background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
@@ -51,13 +50,16 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         importImages(1, 10, pigFrames);
         importImages(11, 12, catFrames);
         importImages(13, 23, pig2Frames);
-        importImages(24, 42, balloonFrames);
+        importImages(43, 43, balloonFrames);
 
         balloons = new ArrayList<>();
         balloons.add(new Balloon(balloonFrames, 1));
 
         pressedKeys = new boolean[128];
         time = 0;
+
+        timer = new Timer(100, this);
+        timer.start();
 
         setFocusable(true); // this line of code + one below makes this panel active for keylistener events
         requestFocusInWindow(); // see comment above
@@ -74,16 +76,26 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
 
-        for (int i = 0; i < invisibleRects.size(); i++) {
-            g.drawRect(invisibleRects.get(i).getX(), invisibleRects.get(i).getY(), 20, 20);
+        for (InvisibleRect invisibleRect : invisibleRects) {
+            g.drawRect(invisibleRect.getX(), invisibleRect.getY(), 20, 20);
+            for (Balloon balloon : balloons) {
+                if (balloon.getRect().intersects(invisibleRect.getRect()) && time >= 2.2) {
+                    balloon.incrementTurnNum();
+                    System.out.println(balloon.getTurnNum());
+                    time = 0;
+                }
+            }
         }
 
-        g.drawImage(background, 0, 0, null);  // the order that things get "painted" matter; we put background down first
+        g.drawImage(background, 0, 0, null);
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
         g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
 
-
+        for (Balloon balloon : balloons) {
+            balloon.move();
+            g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
+        }
     }
 
     @Override
@@ -112,7 +124,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     }
 
-    public void actionPerformed (ActionEvent e) {}
+    public void actionPerformed (ActionEvent e) {
+        if (e.getSource() instanceof Timer) {
+            time += .1;
+        }
+
+    }
 
 
     @Override

@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -7,13 +8,15 @@ public class Balloon extends Animation {
     double y;
     int turnNum;
     Boolean right;
+    Boolean once;
 
     public Balloon(ArrayList<BufferedImage> frames, int delay) {
         super(frames, delay);
-        x = 300;
-        y = 0;
+        x = 110;
+        y = 5;
         turnNum = 0;
         right = true;
+        once = true;
     }
 
     public int getX() {
@@ -24,6 +27,18 @@ public class Balloon extends Animation {
         return (int) y;
     }
 
+    public int getTurnNum() {
+        return turnNum;
+    }
+
+    public Boolean getOnce() {
+        return once;
+    }
+
+    public void setOnce(Boolean value) {
+        once = value;
+    }
+
     public void move() {
         if (turnNum % 2 == 0) {
             incrementY();
@@ -32,21 +47,26 @@ public class Balloon extends Animation {
         }
     }
 
-
     private void incrementX() {
-        if (right) {
-            x += 0.1;
+        if (turnNum < 3 || turnNum == 9) {
+            x += 0.05;
         } else {
-            x -= 0.1;
+            x -= 0.05;
         }
     }
 
     private void incrementY() {
-        y += 0.1;
+        y += 0.05;
     }
 
     public void incrementTurnNum() {
         turnNum++;
+    }
+
+    public Rectangle getRect() {
+        int imageHeight = getActiveFrame().getHeight();
+        int imageWidth = getActiveFrame().getWidth();
+        return new Rectangle((int) x, (int) y, imageWidth, imageHeight);
     }
 }
 
