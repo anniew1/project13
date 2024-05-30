@@ -12,7 +12,7 @@ public class Balloon extends Animation {
 
     public Balloon(ArrayList<BufferedImage> frames, int delay) {
         super(frames, delay);
-        x = 110;
+        x = 209;
         y = 5;
         turnNum = 0;
         right = true;
@@ -49,14 +49,14 @@ public class Balloon extends Animation {
 
     private void incrementX() {
         if (turnNum < 3 || turnNum == 9) {
-            x += 0.05;
+            x += .5;
         } else {
-            x -= 0.05;
+            x -= .5;
         }
     }
 
     private void incrementY() {
-        y += 0.05;
+        y += .5;
     }
 
     public void incrementTurnNum() {

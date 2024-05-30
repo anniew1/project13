@@ -21,23 +21,32 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private ArrayList<BufferedImage> catFrames;
     private ArrayList<BufferedImage> pig2Frames;
     private ArrayList<InvisibleRect> invisibleRects;
+    private ArrayList<InvisibleRect> invisibleRects2;
 
     public GraphicsPanel(String name) {
 
         invisibleRects = new ArrayList<>();
-        invisibleRects.add(new InvisibleRect(124, 85));
-        invisibleRects.add(new InvisibleRect(510, 82));
-        invisibleRects.add(new InvisibleRect(510, 222));
-        invisibleRects.add(new InvisibleRect(350, 207));
-        invisibleRects.add(new InvisibleRect(359, 362));
-        invisibleRects.add(new InvisibleRect(225, 360));
-        invisibleRects.add(new InvisibleRect(230, 497));
-        invisibleRects.add(new InvisibleRect(105, 488));
-        invisibleRects.add(new InvisibleRect(116, 630));
-        invisibleRects.add(new InvisibleRect(511, 612));
+
+        invisibleRects.add(new InvisibleRect(201, 74));
+        invisibleRects.add(new InvisibleRect(518, 63));
+        invisibleRects.add(new InvisibleRect(518, 175));
+        invisibleRects.add(new InvisibleRect(376, 140));
+        invisibleRects.add(new InvisibleRect(419, 296));
+        invisibleRects.add(new InvisibleRect(285, 275));
+        invisibleRects.add(new InvisibleRect(308, 397));
+        invisibleRects.add(new InvisibleRect(189, 384));
+        invisibleRects.add(new InvisibleRect(198, 502));
+        invisibleRects.add(new InvisibleRect(518, 480));
+
+        invisibleRects2 = new ArrayList<>();
+
+        for (InvisibleRect rect: invisibleRects) {
+            invisibleRects2.add(new InvisibleRect(583 - rect.getX(), rect.getY()));
+        }
 
         try {
-            background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
+            //background = ImageIO.read(new File("src/assets/dwasdwa.jpg"));
+            background = ImageIO.read(new File("src/assets/background.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -75,11 +84,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
+        g.drawImage(background, 0, 0, null);
 
         for (InvisibleRect invisibleRect : invisibleRects) {
             g.drawRect(invisibleRect.getX(), invisibleRect.getY(), 20, 20);
             for (Balloon balloon : balloons) {
-                if (balloon.getRect().intersects(invisibleRect.getRect()) && time >= 2.2) {
+                if (balloon.getRect().intersects(invisibleRect.getRect()) && time >= 1.5) {
                     balloon.incrementTurnNum();
                     System.out.println(balloon.getTurnNum());
                     time = 0;
@@ -87,7 +97,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             }
         }
 
-        g.drawImage(background, 0, 0, null);
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
         g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
         g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
