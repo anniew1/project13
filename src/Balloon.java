@@ -25,7 +25,7 @@ public class Balloon extends Animation implements ActionListener {
         y = 5;
         turnNum = 0;
         time = 0;
-        timer = new Timer(100, this);
+        timer = new Timer(1000, this);
         timer.start();
     }
 
@@ -83,7 +83,7 @@ public class Balloon extends Animation implements ActionListener {
 
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
-            time += .1; //NOTE TO ME : SWAP TIME TO .1 AND TIMER DELAY TO 100
+            time += .01; //NOTE TO ME : SWAP TIME TO .1 AND TIMER DELAY TO 100
         }
     }
 }

@@ -11,7 +11,7 @@ public class MainFrame implements ActionListener {
     public MainFrame(String name) {
         JFrame frame = new JFrame("Balloon Wars");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1180, 600); // 540 height of image + 40 for window menu bar
+        frame.setSize(1186, 600); // 540 height of image + 40 for window menu bar
         frame.setLocationRelativeTo(null); // auto-centers frame in screen
 
         // create and add panel
