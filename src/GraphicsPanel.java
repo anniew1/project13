@@ -136,7 +136,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
     @Override
     public void mousePressed(MouseEvent e) {
-        holdingMouse = true;
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -144,31 +143,27 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         int y = e.getY();
         System.out.println(x + "," + y);//these co-ords are relative to the component
         holdingMouse = false;
-
     }
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .1;
-        } else if (e.getSource() instanceof JButton && holdingMouse == true) {
-            System.out.println("Holding mouse and click buttoning");
+        }
+        if (e.getSource() instanceof JButton button) {
+            if (button == predator1Button) {
+                System.out.println("holding mouse on button1");
+            }
         }
     }
 
     @Override
-    public void run() {
-
-    }
+    public void run() {}
 
     private void importImages(int startNum, int endNum, ArrayList<BufferedImage> list) {
         for (int i = startNum; i <= endNum; i++) {
