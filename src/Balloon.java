@@ -1,22 +1,32 @@
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class Balloon extends Animation {
+public class Balloon extends Animation implements ActionListener {
 
     double x;
     double y;
     int turnNum;
-    Boolean right;
-    Boolean once;
+    private Timer timer;
+    private double time;
+    Boolean leftSide;
 
-    public Balloon(ArrayList<BufferedImage> frames, int delay) {
+    public Balloon(ArrayList<BufferedImage> frames, int delay, Boolean leftSide) {
         super(frames, delay);
-        x = 209;
+        this.leftSide = leftSide;
+        if (leftSide) {
+            x = 209;
+        } else {
+            x = 960;
+        }
         y = 5;
         turnNum = 0;
-        right = true;
-        once = true;
+        time = 0;
+        timer = new Timer(1000, this);
+        timer.start();
     }
 
     public int getX() {
@@ -27,16 +37,12 @@ public class Balloon extends Animation {
         return (int) y;
     }
 
-    public int getTurnNum() {
-        return turnNum;
+    public double getTime() {
+        return time;
     }
 
-    public Boolean getOnce() {
-        return once;
-    }
-
-    public void setOnce(Boolean value) {
-        once = value;
+    public void zeroTime() {
+        time = 0;
     }
 
     public void move() {
@@ -48,10 +54,16 @@ public class Balloon extends Animation {
     }
 
     private void incrementX() {
-        if (turnNum < 3 || turnNum == 9) {
-            x += .5;
+        double moveValue;
+        if (leftSide) {
+            moveValue = .5;
         } else {
-            x -= .5;
+            moveValue = -.5;
+        }
+        if ((turnNum < 3 || turnNum == 9)) {
+            x += moveValue;
+        } else {
+            x -= moveValue;
         }
     }
 
@@ -67,6 +79,12 @@ public class Balloon extends Animation {
         int imageHeight = getActiveFrame().getHeight();
         int imageWidth = getActiveFrame().getWidth();
         return new Rectangle((int) x, (int) y, imageWidth, imageHeight);
+    }
+
+    public void actionPerformed (ActionEvent e) {
+        if (e.getSource() instanceof Timer) {
+            time += .001; //NOTE TO ME : SWAP TIME TO .1 AND TIMER DELAY TO 100
+        }
     }
 }
 
