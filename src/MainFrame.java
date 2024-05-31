@@ -31,7 +31,7 @@ public class MainFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .001;
-            if (time >= .01) { // .01 for macbook home, .001 for school desktops
+            if (time >= .001) { // .01 for macbook home, .001 for school desktops
                 panel.repaint();
                 time = 0;
             }
