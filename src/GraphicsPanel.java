@@ -22,8 +22,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<BufferedImage> pig2Frames;
     private ArrayList<InvisibleRect> invisibleRects;
     private ArrayList<InvisibleRect> invisibleRects2;
-    private JButton predator1;
-    private Icon predator1Icon;
+    private JButton predator1Button;
+    private JButton predator2Button;
+    private JButton predator3Button;
+    private JButton predator4Button;
+    private JButton predator5Button;
+    private JButton predator6Button;
+    private Boolean holdingMouse;
 
     public GraphicsPanel(String name) {
 
@@ -65,7 +70,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         balloons = new ArrayList<>();
         balloons.add(new Balloon(balloonFrames, 1, true));
-        balloons.add(new Balloon(balloonFrames, 1, true));
 
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
@@ -79,20 +83,34 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         animatePig = new Animation(pigFrames, 1);
         animatePig2 = new Animation(pig2Frames, 1);
 
-        predator1Icon = new ImageIcon("src/assets/predator1.png");
-        predator1 = new JButton(predator1Icon);
-        add(predator1);
-        predator1.addActionListener(this);
-        predator1.setLocation(50, 50);
+        // adds all the buttons 1-3 left side 4-6 right side
+        predator1Button = addPredatorButton("src/assets/predator1.png");
+        predator2Button = addPredatorButton("src/assets/predator11.png");
+        predator3Button = addPredatorButton("src/assets/predator13.png");
+        predator4Button = addPredatorButton("src/assets/predator1.png");
+        predator5Button = addPredatorButton("src/assets/predator11.png");
+        predator6Button = addPredatorButton("src/assets/predator13.png");
+
+        holdingMouse = false;
+
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);  // just do this
-        g.drawImage(background, 0, 0, null);
 
         checkTurns(g, invisibleRects, balloons);
         checkTurns(g, invisibleRects2, balloons2);
+
+        g.drawImage(background, 0, 0, null);
+
+        // moves buttons to right location
+        predator1Button.setLocation(2, 15);
+        predator2Button.setLocation(2, 140);
+        predator3Button.setLocation(2, 247);
+        predator4Button.setLocation(1064, 15);
+        predator5Button.setLocation(1064, 140);
+        predator6Button.setLocation(1064, 247);
 
         // animation
         g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
@@ -118,13 +136,15 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        holdingMouse = true;
     }
 
     public void mouseReleased(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
         System.out.println(x + "," + y);//these co-ords are relative to the component
+        holdingMouse = false;
+
     }
 
     @Override
@@ -140,6 +160,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .1;
+        } else if (e.getSource() instanceof JButton && holdingMouse == true) {
+            System.out.println("Holding mouse and click buttoning");
         }
     }
 
@@ -169,6 +191,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
         }
+    }
+
+    private JButton addPredatorButton(String fileLocation) {
+        JButton predator = new JButton(new ImageIcon(fileLocation));
+        predator.addActionListener(this);
+        add(predator);
+        return predator;
     }
 
 }
