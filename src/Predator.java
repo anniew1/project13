@@ -8,7 +8,9 @@ public class Predator {
     int x;
     int y;
 
-    public Predator(ArrayList<BufferedImage> frames) {
+    public Predator(ArrayList<BufferedImage> frames, int x, int y) {
+        this.x = x;
+        this.y = y;
         this.frames = frames;
         currentFrame = 0;
     }

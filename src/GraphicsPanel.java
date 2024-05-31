@@ -146,23 +146,30 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
     }
 
-    //gets index of balloon to be shot in array list
-    public int shootIdx(ArrayList<Balloon> b, ArrayList<Predator> p){
-        int choice = 0;
-        int distance = 100000;
+    //gets index of predators who can shoot ( their distance is 200 or less from a balloon)
+    public ArrayList<Integer> shootIdx(ArrayList<Balloon> b, ArrayList<Predator> p){
+        //this
+        ArrayList<Integer> indexes = new ArrayList<>();
+        double distance;
+        int x2;
+        int y2;
+        int x1;
+        int y1;
+
         for (int i = 1; i < b.size(); i++){
-            int x1 = b.get(choice).getX();
-            int y1 = b.get(choice).getY();
-            int dist2;
+            x1 = b.get(i).getX();
+            y1 = b.get(i).getY();
             for(int j = 1; j < p.size(); j++){
                 Predator pred = p.get(j);
-                if(pred.get)
-
+                x2 = pred.getX();
+                y2 = pred.getY();
+                distance = Math.sqrt((double)((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1)));
             }
 
 
 
         }
+        return indexes;
     }
 
 
