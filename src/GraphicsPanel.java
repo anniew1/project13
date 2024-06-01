@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel implements MouseListener, ActionListener, Runnable {
-    private Animation animateCat;
-    private Animation animatePig;
-    private Animation animatePig2;
     private ArrayList<Balloon> balloons;
     private ArrayList<Balloon> balloons2;
     private ArrayList<Predator> predators;
@@ -24,15 +21,11 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<BufferedImage> pig2Frames;
     private ArrayList<InvisibleRect> invisibleRects;
     private ArrayList<InvisibleRect> invisibleRects2;
-    private JButton predator1Button;
-    private JButton predator2Button;
-    private JButton predator3Button;
-    private JButton predator4Button;
-    private JButton predator5Button;
-    private JButton predator6Button;
     private Boolean holdingMouse;
     private Balloon b;
     private int idx;
+    private ArrayList<PredatorButton> predatorButtons;
+    private int predatorNumDragged;
 
     public GraphicsPanel(String name) {
 
@@ -67,7 +60,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         pig2Frames = new ArrayList<>();
         balloonFrames = new ArrayList<>();
 
-
         importImages(1, 10, pigFrames);
         importImages(11, 12, catFrames);
         importImages(13, 23, pig2Frames);
@@ -79,31 +71,31 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         balloons.add(b);
 
         balloons2 = new ArrayList<>();
-        balloons2.add(b);
+        balloons2.add(new Balloon(balloonFrames, 1, false));
+
         idx = 0;
         time = 100;
-        timer = new Timer(1000, this); // this Timer will call the actionPerformed interface method every 1000ms = 1 second
+        timer = new Timer(1000, this);
         timer.start();
 
-        setFocusable(true); // this line of code + one below makes this panel active for key listener events
-        requestFocusInWindow(); // see comment above
+        setFocusable(true);
+        requestFocusInWindow();
 
         addMouseListener(this);
 
-        animateCat = new Animation(catFrames, 10);
-        animatePig = new Animation(pigFrames, 10);
-        animatePig2 = new Animation(pig2Frames, 10);
+        predatorButtons = new ArrayList<>();
+        // creates objects that will serve as buttons to place predators
+        predatorButtons.add(new PredatorButton(2, 15, 1 ));
+        predatorButtons.add(new PredatorButton(2, 140, 11 ));
+        predatorButtons.add(new PredatorButton(2, 247, 13 ));
 
-        // adds all the buttons 1-3 left side 4-6 right side
-        predator1Button = addPredatorButton("src/assets/predator1.png");
-        predator2Button = addPredatorButton("src/assets/predator11.png");
-        predator3Button = addPredatorButton("src/assets/predator13.png");
-        predator4Button = addPredatorButton("src/assets/predator1.png");
-        predator5Button = addPredatorButton("src/assets/predator11.png");
-        predator6Button = addPredatorButton("src/assets/predator13.png");
+        predatorButtons.add(new PredatorButton(1064, 15, 1 ));
+        predatorButtons.add(new PredatorButton(1064, 140, 11 ));
+        predatorButtons.add(new PredatorButton(1064, 247, 13 ));
 
         holdingMouse = false;
-
+        predatorNumDragged = -1;
+        predators = new ArrayList<>();
     }
 
     @Override
@@ -113,25 +105,14 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         checkTurns(g, invisibleRects, balloons);
         checkTurns(g, invisibleRects2, balloons2);
-        if(time/10 == 0){
 
-        }
-
+        if (time/10 == 0) {}
 
         g.drawImage(background, 0, 0, null);
 
-        // moves buttons to right location
-        predator1Button.setLocation(2, 15);
-        predator2Button.setLocation(2, 140);
-        predator3Button.setLocation(2, 247);
-        predator4Button.setLocation(1064, 15);
-        predator5Button.setLocation(1064, 140);
-        predator6Button.setLocation(1064, 247);
-
-        // animation
-        g.drawImage(animateCat.getActiveFrame(), 200, 100, null);
-        g.drawImage(animatePig.getActiveFrame(), 100, 100, null);
-        g.drawImage(animatePig2.getActiveFrame(), 300, 100, null);
+        for (Predator predator : predators) {
+            g.drawImage(predator.getActiveFrame(), predator.getX(), predator.getY(), null);
+        }
 
         //moves the balloons
         for (Balloon balloon : balloons) {
@@ -144,6 +125,15 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
         }
 
+        // draws the buttons used to place predators
+        for (PredatorButton button : predatorButtons) {
+            g.drawImage(button.getImage(), button.getX(), button.getY(), null);
+        }
+
+        // for dragging predators and placing them
+        if (predatorNumDragged >= 0) {
+            g.drawImage(predatorButtons.get(predatorNumDragged).getImage(), MouseInfo.getPointerInfo().getLocation().x - 150, MouseInfo.getPointerInfo().getLocation().y - 200, null);
+        }
     }
 
     //gets index of predators who can shoot ( their distance is 200 or less from a balloon)
@@ -165,9 +155,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 y2 = pred.getY();
                 distance = Math.sqrt((double)((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1)));
             }
-
-
-
         }
         return indexes;
     }
@@ -180,13 +167,28 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
     @Override
     public void mousePressed(MouseEvent e) {
+        int i = 0;
+        for (PredatorButton button: predatorButtons) {
+            Boolean dragged = checkClickedImaged(button.getX(), button.getY(), button.getImage().getWidth(), button.getImage().getHeight(), e.getPoint());
+            if (dragged) {
+                predatorNumDragged = i;
+            }
+            i++;
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-        System.out.println(x + "," + y);//these co-ords are relative to the component
         holdingMouse = false;
+        if (predatorNumDragged >= 0) {
+            ArrayList<BufferedImage> animalFrames = pig2Frames;
+            if (predatorNumDragged == 0 || predatorNumDragged == 3) {
+                animalFrames = pigFrames;
+            } else if (predatorNumDragged == 1 || predatorNumDragged == 4) {
+                animalFrames = catFrames;
+            }
+            predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 150, MouseInfo.getPointerInfo().getLocation().y - 200));
+            predatorNumDragged = -1;
+        }
     }
 
     @Override
@@ -198,11 +200,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .1;
-        }
-        if (e.getSource() instanceof JButton button) {
-            if (button == predator1Button) {
-                System.out.println("holding mouse on button1");
-            }
         }
     }
 
@@ -239,6 +236,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         return predator;
     }
 
+    private Boolean checkClickedImaged(int x, int y, int width, int height, Point point) {
+        if (new Rectangle(x, y, width, height).contains(point)) {
+            holdingMouse = true;
+            return true;
+        }
+        return false;
+    }
 }
 
 
