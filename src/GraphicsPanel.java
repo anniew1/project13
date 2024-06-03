@@ -25,6 +25,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private Balloon b;
     private int idx;
     private ArrayList<PredatorButton> predatorButtons;
+    SoundPlayer soundPlayer;
+    String soundFilePath;
     private int predatorNumDragged;
 
     public GraphicsPanel(String name) {
@@ -54,6 +56,11 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+
+        //Sound initialized
+        SoundPlayer soundPlayer = new SoundPlayer();
+        String soundFilePath = "path/to/your/soundfile.wav"; // Change this to your sound file's path
+
 
         pigFrames = new ArrayList<>();
         catFrames = new ArrayList<>();
@@ -106,9 +113,23 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         checkTurns(g, invisibleRects, balloons);
         checkTurns(g, invisibleRects2, balloons2);
 
-        if (time/10 == 0) {}
+
 
         g.drawImage(background, 0, 0, null);
+
+        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
+        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
+
+        //this is where the predators in p1 and p2 are shooting (the ones which are in range only
+        for(int i : p1Shoots){
+            //predators.get(i).shoot();
+        }
+        for(int i : p2Shoots){
+            //predators2.get(i).shoot();
+        }
+        //if popped balloon or maybe background music
+        soundPlayer.playSound(soundFilePath);
+
 
         for (Predator predator : predators) {
             g.drawImage(predator.getActiveFrame(), predator.getX(), predator.getY(), null);
@@ -146,14 +167,17 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         int x1;
         int y1;
 
-        for (int i = 1; i < b.size(); i++){
+        for (int i = 0; i < b.size(); i++){
             x1 = b.get(i).getX();
             y1 = b.get(i).getY();
-            for(int j = 1; j < p.size(); j++){
+            for(int j = 0; j < p.size(); j++){
                 Predator pred = p.get(j);
                 x2 = pred.getX();
                 y2 = pred.getY();
                 distance = Math.sqrt((double)((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1)));
+                if(distance <= 200){
+                    indexes.add(j);
+                }
             }
         }
         return indexes;
