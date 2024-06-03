@@ -28,6 +28,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     SoundPlayer soundPlayer;
     String soundFilePath;
     private int predatorNumDragged;
+    private int timeBetweenBalloons;
+    private int timeBetweenBalloons2;
 
     public GraphicsPanel(String name) {
 
@@ -74,6 +76,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         b = new Balloon(balloonFrames, 1, true);
 
         balloons = new ArrayList<>();
+        balloons.add(b);
         balloons.add(b);
 
         balloons2 = new ArrayList<>();
@@ -138,11 +141,22 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         for (Balloon balloon : balloons) {
             balloon.move();
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
         }
+
         for (Balloon balloon : balloons2) {
             balloon.move();
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         // draws the buttons used to place predators
@@ -223,7 +237,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .1;
-
+            timeBetweenBalloons += 1;
+            timeBetweenBalloons2 += 1;
         }
     }
 
