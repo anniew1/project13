@@ -28,13 +28,16 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private int predatorNumDragged;
     private int timeBetweenBalloons;
     private int timeBetweenBalloons2;
+    private int numBalloonsPerRound;
+    private int balloonSpawned;
+    private int balloonSpawned2;
 
     public GraphicsPanel(String name) {
 
         // adds rectangles with the coordinates of the corners of path for left side
         invisibleRects = new ArrayList<>();
         invisibleRects.add(new InvisibleRect(201, 74));
-        invisibleRects.add(new InvisibleRect(518, 63));
+        invisibleRects.add(new InvisibleRect(518, 67));
         invisibleRects.add(new InvisibleRect(518, 175));
         invisibleRects.add(new InvisibleRect(376, 140));
         invisibleRects.add(new InvisibleRect(419, 296));
@@ -57,8 +60,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             System.out.println(e.getMessage());
         }
 
-
-
         pigFrames = new ArrayList<>();
         catFrames = new ArrayList<>();
         pig2Frames = new ArrayList<>();
@@ -72,14 +73,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         balloons = new ArrayList<>();
         balloons.add(b);
-        balloons.add(b);
 
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
 
         idx = 0;
         time = 100;
-        timer = new Timer(100, this);
+        timer = new Timer(1000, this);
         timer.start();
 
         setFocusable(true);
@@ -100,6 +100,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         holdingMouse = false;
         predatorNumDragged = -1;
         predators = new ArrayList<>();
+        balloonSpawned = 0;
+        balloonSpawned2 = 0;
+        numBalloonsPerRound = 10;
     }
 
     @Override
@@ -107,12 +110,22 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         super.paintComponent(g);  // just do this
 
+        g.drawImage(background, 0, 0, null);
+
         checkTurns(g, invisibleRects, balloons);
         checkTurns(g, invisibleRects2, balloons2);
 
+        if (timeBetweenBalloons >= 2 && balloonSpawned < numBalloonsPerRound) {
+            balloons.add(new Balloon(balloonFrames, 1, true));
+            timeBetweenBalloons = 0;
+            balloonSpawned++;
+        }
 
-
-        g.drawImage(background, 0, 0, null);
+        if (timeBetweenBalloons2 >= 2 && balloonSpawned2 < numBalloonsPerRound) {
+            balloons2.add(new Balloon(balloonFrames, 1, false));
+            timeBetweenBalloons2 = 0;
+            balloonSpawned2++;
+        }
 
 //        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
 //        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
@@ -136,22 +149,11 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         for (Balloon balloon : balloons) {
             balloon.move();
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
         }
 
         for (Balloon balloon : balloons2) {
             balloon.move();
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
 
         // draws the buttons used to place predators
@@ -230,8 +232,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void mouseExited(MouseEvent e) {}
 
     public void actionPerformed (ActionEvent e) {
+        System.out.println("hhhh");
         if (e.getSource() instanceof Timer) {
-            time += .1;
             timeBetweenBalloons += 1;
             timeBetweenBalloons2 += 1;
         }
@@ -277,6 +279,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         }
         return false;
     }
+
+    private void checkCoordinates() {}
 }
 
 

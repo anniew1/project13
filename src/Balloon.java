@@ -13,6 +13,7 @@ public class Balloon extends Animation implements ActionListener {
     private Timer timer;
     private double time;
     Boolean leftSide;
+    private int numBalloonsPerRound;
 
     public Balloon(ArrayList<BufferedImage> frames, int delay, Boolean leftSide) {
         super(frames, delay);
@@ -84,6 +85,7 @@ public class Balloon extends Animation implements ActionListener {
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .01;
+            System.out.println(time);
         }
     }
 }
