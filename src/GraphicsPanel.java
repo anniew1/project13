@@ -70,14 +70,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         balloons = new ArrayList<>();
         balloons.add(b);
-        balloons.add(b);
 
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
 
         idx = 0;
         time = 100;
-        timer = new Timer(1000, this);
+        timer = new Timer(100, this);
         timer.start();
 
         setFocusable(true);
@@ -112,11 +111,10 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         g.drawImage(background, 0, 0, null);
 
-
 //        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
 //        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
-
-        //this is where the predators in p1 and p2 are shooting (the ones which are in range only
+//
+//        //this is where the predators in p1 and p2 are shooting (the ones which are in range only
 //        for(int i : p1Shoots){
 //            //predators.get(i).shoot();
 //        }
@@ -124,7 +122,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 //            //predators2.get(i).shoot();
 //        }
         //if popped balloon or maybe background music
-
+        //soundPlayer.playSound(soundFilePath);
 
 
         for (Predator predator : predators) {
@@ -149,7 +147,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         // for dragging predators and placing them
         if (predatorNumDragged >= 0) {
-            g.drawImage(predatorButtons.get(predatorNumDragged).getImage(), MouseInfo.getPointerInfo().getLocation().x - 150, MouseInfo.getPointerInfo().getLocation().y - 200, null);
+            g.drawImage(predatorButtons.get(predatorNumDragged).getImage(), MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300, null);
         }
     }
 
@@ -206,7 +204,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             } else if (predatorNumDragged == 1 || predatorNumDragged == 4) {
                 animalFrames = catFrames;
             }
-            predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 150, MouseInfo.getPointerInfo().getLocation().y - 200));
+            predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
             predatorNumDragged = -1;
         }
     }
@@ -220,6 +218,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .1;
+
         }
     }
 
