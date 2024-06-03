@@ -74,6 +74,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         balloons.add(b);
         balloons.add(b);
 
+
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
 
@@ -100,6 +101,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         holdingMouse = false;
         predatorNumDragged = -1;
         predators = new ArrayList<>();
+        predators2 = new ArrayList<>();
+        //predators2.add(new Predator(pigFrames, 400, 0));
+
     }
 
     @Override
@@ -114,18 +118,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         g.drawImage(background, 0, 0, null);
 
-//        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
-//        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
-//
-//        //this is where the predators in p1 and p2 are shooting (the ones which are in range only
-//        for(int i : p1Shoots){
-//            //predators.get(i).shoot();
-//        }
-//        for(int i : p2Shoots){
-//            //predators2.get(i).shoot();
-//        }
-        //if popped balloon or maybe background music
-        //soundPlayer.playSound(soundFilePath);
+
 
 
         for (Predator predator : predators) {
@@ -145,6 +138,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         }
 
         for (Balloon balloon : balloons2) {
+
             balloon.move();
             g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
             try {
@@ -159,6 +153,57 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             g.drawImage(button.getImage(), button.getX(), button.getY(), null);
         }
 
+        ArrayList<Integer> p1Shoots = new ArrayList<>();
+        ArrayList<Integer> p2Shoots = new ArrayList<>();
+        double distance;
+        int x2;
+        int y2;
+        int x1;
+        int y1;
+        if(predators.size() > 0 && balloons.size() > 0) {
+
+
+            for (int i = 0; i < balloons.size(); i++) {
+                x1 = balloons.get(i).getX();
+                y1 = balloons.get(i).getY();
+                for (int j = 0; j < predators.size(); j++) {
+                    Predator pred = predators.get(j);
+                    x2 = pred.getX();
+                    y2 = pred.getY();
+                    distance = Math.sqrt((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+                    if (distance <= 150) {
+                        p1Shoots.add(j);
+                    }
+                }
+            }
+            for (Integer i : p1Shoots) {
+                System.out.println("works1");
+                //over here there will be code to make predators shoot a ball shaped bullet
+            }
+        }
+
+
+        if(predators2.size() > 0 && balloons2.size() > 0) {
+
+            for (int i = 0; i < balloons2.size(); i++) {
+                x1 = balloons2.get(i).getX();
+                y1 = balloons2.get(i).getY();
+                for (int j = 0; j < predators2.size(); j++) {
+                    Predator pred = predators2.get(j);
+                    x2 = pred.getX();
+                    y2 = pred.getY();
+                    distance = Math.sqrt((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+                    if (distance <= 150) {
+                        p2Shoots.add(j);
+                    }
+                }
+            }
+            for (Integer i : p2Shoots) {
+                System.out.println("works2");
+                //over here there will be code to make predators shoot a ball shaped bullet
+            }
+        }
+
         // for dragging predators and placing them
         if (predatorNumDragged >= 0) {
             g.drawImage(predatorButtons.get(predatorNumDragged).getImage(), MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300, null);
@@ -166,30 +211,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     }
 
     //gets index of predators who can shoot ( their distance is 200 or less from a balloon)
-    public ArrayList<Integer> shootIdx(ArrayList<Balloon> b, ArrayList<Predator> p){
-        //this
-        ArrayList<Integer> indexes = new ArrayList<>();
-        double distance;
-        int x2;
-        int y2;
-        int x1;
-        int y1;
 
-        for (int i = 0; i < b.size(); i++){
-            x1 = b.get(i).getX();
-            y1 = b.get(i).getY();
-            for(int j = 0; j < p.size(); j++){
-                Predator pred = p.get(j);
-                x2 = pred.getX();
-                y2 = pred.getY();
-                distance = Math.sqrt((double)((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1)));
-                if(distance <= 200){
-                    indexes.add(j);
-                }
-            }
-        }
-        return indexes;
-    }
 
 
     @Override
