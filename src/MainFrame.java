@@ -24,6 +24,11 @@ public class MainFrame implements ActionListener {
         time = 0;
         timer = new Timer(1, this);
         timer.start();
+
+        //Sound initialized
+        SoundPlayer soundPlayer = new SoundPlayer();
+        String soundFilePath = "src/assets/theme.wav"; // Change this to your sound file's path
+        soundPlayer.playSound(soundFilePath);
     }
 
 

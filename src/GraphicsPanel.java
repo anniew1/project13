@@ -25,8 +25,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private Balloon b;
     private int idx;
     private ArrayList<PredatorButton> predatorButtons;
-    SoundPlayer soundPlayer;
-    String soundFilePath;
     private int predatorNumDragged;
 
     public GraphicsPanel(String name) {
@@ -57,9 +55,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             System.out.println(e.getMessage());
         }
 
-        //Sound initialized
-        SoundPlayer soundPlayer = new SoundPlayer();
-        String soundFilePath = "path/to/your/soundfile.wav"; // Change this to your sound file's path
 
 
         pigFrames = new ArrayList<>();
@@ -117,18 +112,19 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         g.drawImage(background, 0, 0, null);
 
-        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
-        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
+
+//        ArrayList<Integer> p1Shoots = shootIdx(balloons, predators);
+//        ArrayList<Integer> p2Shoots = shootIdx(balloons2, predators2);
 
         //this is where the predators in p1 and p2 are shooting (the ones which are in range only
-        for(int i : p1Shoots){
-            //predators.get(i).shoot();
-        }
-        for(int i : p2Shoots){
-            //predators2.get(i).shoot();
-        }
+//        for(int i : p1Shoots){
+//            //predators.get(i).shoot();
+//        }
+//        for(int i : p2Shoots){
+//            //predators2.get(i).shoot();
+//        }
         //if popped balloon or maybe background music
-        soundPlayer.playSound(soundFilePath);
+
 
 
         for (Predator predator : predators) {
