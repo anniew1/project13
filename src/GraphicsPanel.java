@@ -25,8 +25,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private Balloon b;
     private int idx;
     private ArrayList<PredatorButton> predatorButtons;
-    SoundPlayer soundPlayer;
-    String soundFilePath;
     private int predatorNumDragged;
     private int timeBetweenBalloons;
     private int timeBetweenBalloons2;
@@ -59,9 +57,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             System.out.println(e.getMessage());
         }
 
-        //Sound initialized
-        SoundPlayer soundPlayer = new SoundPlayer();
-        String soundFilePath = "path/to/your/soundfile.wav"; // Change this to your sound file's path
 
 
         pigFrames = new ArrayList<>();
