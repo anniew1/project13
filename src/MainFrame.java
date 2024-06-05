@@ -35,11 +35,7 @@ public class MainFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof Timer) {
-            //time += .001;
-           // if (time >= .001) {
-                panel.repaint();
-           //     time = 0;
-           // }
+            panel.repaint();
         }
     }
 

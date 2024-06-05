@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel implements MouseListener, ActionListener, Runnable {
@@ -14,16 +15,12 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<Predator> predators2;
     private BufferedImage background;
     private Timer timer;
-    private int time;
     private ArrayList<BufferedImage> pigFrames;
     private ArrayList<BufferedImage> balloonFrames;
     private ArrayList<BufferedImage> catFrames;
     private ArrayList<BufferedImage> pig2Frames;
     private ArrayList<InvisibleRect> invisibleRects;
     private ArrayList<InvisibleRect> invisibleRects2;
-    private Boolean holdingMouse;
-    private Balloon b;
-    private int idx;
     private ArrayList<PredatorButton> predatorButtons;
     private int predatorNumDragged;
     private int timeBetweenBalloons;
@@ -31,6 +28,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private int numBalloonsPerRound;
     private int balloonSpawned;
     private int balloonSpawned2;
+    Player p1;
+    Player p2;
 
     public GraphicsPanel(String name) {
 
@@ -69,17 +68,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         importImages(11, 12, catFrames);
         importImages(13, 23, pig2Frames);
         importImages(43, 43, balloonFrames);
-        b = new Balloon(balloonFrames, 1, true);
 
         balloons = new ArrayList<>();
-        balloons.add(b);
-
+        balloons.add(new Balloon(balloonFrames, 1, true));
 
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
 
-        idx = 0;
-        time = 100;
         timer = new Timer(1000, this);
         timer.start();
 
@@ -90,35 +85,45 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         predatorButtons = new ArrayList<>();
         // creates objects that will serve as buttons to place predators
-        predatorButtons.add(new PredatorButton(2, 15, 1 ));
-        predatorButtons.add(new PredatorButton(2, 140, 11 ));
-        predatorButtons.add(new PredatorButton(2, 247, 13 ));
+        predatorButtons.add(new PredatorButton(10, 15, 1 ));
+        predatorButtons.add(new PredatorButton(10, 140, 11 ));
+        predatorButtons.add(new PredatorButton(10, 247, 13 ));
 
-        predatorButtons.add(new PredatorButton(1064, 15, 1 ));
-        predatorButtons.add(new PredatorButton(1064, 140, 11 ));
-        predatorButtons.add(new PredatorButton(1064, 247, 13 ));
+        predatorButtons.add(new PredatorButton(1075, 15, 1 ));
+        predatorButtons.add(new PredatorButton(1075, 140, 11 ));
+        predatorButtons.add(new PredatorButton(1075, 247, 13 ));
 
-        holdingMouse = false;
         predatorNumDragged = -1;
-        predators = new ArrayList<>();
+
         balloonSpawned = 0;
         balloonSpawned2 = 0;
         numBalloonsPerRound = 10;
+
+        predators = new ArrayList<>();
         predators2 = new ArrayList<>();
-        //predators2.add(new Predator(pigFrames, 400, 0));
+
+        p1 = new Player("Player 1");
+        p2 = new Player("Player 2");
 
     }
 
     @Override
     public void paintComponent(Graphics g) {
 
-        super.paintComponent(g);  // just do this
+        super.paintComponent(g);
 
-        g.drawImage(background, 0, 0, null);
-
+        // checks to see if the balloon has to turn
         checkTurns(g, invisibleRects, balloons);
         checkTurns(g, invisibleRects2, balloons2);
 
+        g.drawImage(background, 0, 0, null);
+
+        // draws the players' money and hps
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.drawString("$" + p1.getMoney(), 25, 500);
+        g.drawString("$" + p2.getMoney(), 1080, 500);
+
+        // spawns the balloons
         if (timeBetweenBalloons >= 2 && balloonSpawned < numBalloonsPerRound) {
             balloons.add(new Balloon(balloonFrames, 1, true));
             timeBetweenBalloons = 0;
@@ -131,10 +136,12 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             balloonSpawned2++;
         }
 
-
-
-
+        // draws the predators
         for (Predator predator : predators) {
+            g.drawImage(predator.getActiveFrame(), predator.getX(), predator.getY(), null);
+        }
+
+        for (Predator predator : predators2) {
             g.drawImage(predator.getActiveFrame(), predator.getX(), predator.getY(), null);
         }
 
@@ -179,7 +186,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
             for (Integer i : p1Shoots) {
-                System.out.println("works1");
                 //over here there will be code to make predators shoot a ball shaped bullet
             }
         }
@@ -201,7 +207,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
             for (Integer i : p2Shoots) {
-                System.out.println("works2");
                 //over here there will be code to make predators shoot a ball shaped bullet
             }
         }
@@ -234,7 +239,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     }
 
     public void mouseReleased(MouseEvent e) {
-        holdingMouse = false;
         if (predatorNumDragged >= 0) {
             ArrayList<BufferedImage> animalFrames = pig2Frames;
             if (predatorNumDragged == 0 || predatorNumDragged == 3) {
@@ -242,8 +246,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             } else if (predatorNumDragged == 1 || predatorNumDragged == 4) {
                 animalFrames = catFrames;
             }
-            predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
-            predatorNumDragged = -1;
+            checkCoordinates(e.getX(), animalFrames);
         }
     }
 
@@ -254,7 +257,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void mouseExited(MouseEvent e) {}
 
     public void actionPerformed (ActionEvent e) {
-        System.out.println("hhhh");
         if (e.getSource() instanceof Timer) {
             timeBetweenBalloons += 1;
             timeBetweenBalloons2 += 1;
@@ -264,6 +266,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     @Override
     public void run() {}
 
+
+    // imports the images
     private void importImages(int startNum, int endNum, ArrayList<BufferedImage> list) {
         for (int i = startNum; i <= endNum; i++) {
             try {
@@ -279,7 +283,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         for (InvisibleRect invisibleRect : invisibleRects) {
             g.drawRect(invisibleRect.getX(), invisibleRect.getY(), 20, 20);
             for (Balloon balloon : balloons) {
-                if (balloon.getRect().intersects(invisibleRect.getRect()) && balloon.getTime() >= 1.5) {
+                if (balloon.getRect().intersects(invisibleRect.getRect()) && balloon.getTime() >= 1.3) {
                     balloon.incrementTurnNum();
                     balloon.zeroTime();
                 }
@@ -287,22 +291,36 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         }
     }
 
-    private JButton addPredatorButton(String fileLocation) {
-        JButton predator = new JButton(new ImageIcon(fileLocation));
-        predator.addActionListener(this);
-        add(predator);
-        return predator;
-    }
-
+    // checks to see if an image is being clicked on
     private Boolean checkClickedImaged(int x, int y, int width, int height, Point point) {
         if (new Rectangle(x, y, width, height).contains(point)) {
-            holdingMouse = true;
             return true;
         }
         return false;
     }
 
-    private void checkCoordinates() {}
+    // checks to see what side to add predator to and subtracts the money for corresponding side
+    private void checkCoordinates(int x, ArrayList<BufferedImage> animalFrames) {
+        Boolean rightSide = true;
+
+        if (predatorNumDragged >= 3) {
+            rightSide = false;
+        }
+
+        if (x <= 550 && rightSide) {
+            if (p1.getMoney() >= 400) {
+                predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
+                p1.loseMoney(400);
+            }
+        } else if (x >= 615 && !rightSide) {
+            if (p2.getMoney() >= 400) {
+                predators2.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
+                p2.loseMoney(400);
+            }
+        }
+
+        predatorNumDragged = -1;
+    }
 }
 
 

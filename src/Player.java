@@ -18,6 +18,10 @@ public class Player {
         return money;
     }
 
+    public void loseMoney(int moneyLost) {
+        money -= moneyLost;
+    }
+
     public int getHp() {
         return hp;
     }
