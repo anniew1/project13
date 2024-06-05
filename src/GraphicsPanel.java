@@ -12,7 +12,10 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<Balloon> balloons2;
     private ArrayList<Predator> predators;
     private ArrayList<Predator> predators2;
+    private ArrayList<Predator> bullets;
+    private ArrayList<Predator> bullets2;
     private BufferedImage background;
+    private BufferedImage bullet;
     private Timer timer;
     private int time;
     private ArrayList<BufferedImage> pigFrames;
@@ -56,6 +59,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         // importing all images
         try {
             background = ImageIO.read(new File("src/assets/background.png"));
+            bullet = ImageIO.read(new File("src/assets/bullet.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -155,9 +159,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             g.drawImage(button.getImage(), button.getX(), button.getY(), null);
         }
 
+        ArrayList<Integer> b1Shoots = new ArrayList<>();
+        ArrayList<Integer> b2Shoots = new ArrayList<>();
+        ArrayList<Integer> slopes = new ArrayList<>();
         ArrayList<Integer> p1Shoots = new ArrayList<>();
         ArrayList<Integer> p2Shoots = new ArrayList<>();
         double distance;
+        int slope;
         int x2;
         int y2;
         int x1;
@@ -173,14 +181,24 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                     x2 = pred.getX();
                     y2 = pred.getY();
                     distance = Math.sqrt((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+                    slope = (x2-x1)/(y2-y1);
                     if (distance <= 150) {
+                        slopes.add(slope);
                         p1Shoots.add(j);
+                        b1Shoots.add(i);
                     }
                 }
             }
-            for (Integer i : p1Shoots) {
+            int horizontal = 58;
+            int vertical = 36;
+            for (int x = 0; x < p1Shoots.size(); x++) {
                 System.out.println("works1");
-                //over here there will be code to make predators shoot a ball shaped bullet
+                g.drawImage(bullet, predators.get(p1Shoots.get(x)).getX() + horizontal, predators.get(p1Shoots.get(x)).getY() + vertical, null);
+                //over here there will be code to make predators shoot a ball-shaped bullet
+                horizontal ++;
+                vertical++;
+                //go to mouse released method
+
             }
         }
 
@@ -197,12 +215,14 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                     distance = Math.sqrt((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
                     if (distance <= 150) {
                         p2Shoots.add(j);
+                        b2Shoots.add(i);
                     }
                 }
             }
-            for (Integer i : p2Shoots) {
+            for (int x = 0; x < p2Shoots.size(); x++) {
                 System.out.println("works2");
-                //over here there will be code to make predators shoot a ball shaped bullet
+                g.drawImage(background, 0, 0, null);
+                //over here there will be code to make predators shoot a ball-shaped bullet
             }
         }
 
@@ -232,7 +252,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             i++;
         }
     }
-
+    //ADD BULLETS TO BULLET LIST AFTER PREDATOR ADDED
     public void mouseReleased(MouseEvent e) {
         holdingMouse = false;
         if (predatorNumDragged >= 0) {
@@ -244,6 +264,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             }
             predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
             predatorNumDragged = -1;
+
         }
     }
 
