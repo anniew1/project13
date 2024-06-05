@@ -85,7 +85,6 @@ public class Balloon extends Animation implements ActionListener {
     public void actionPerformed (ActionEvent e) {
         if (e.getSource() instanceof Timer) {
             time += .01;
-            System.out.println(time);
         }
     }
 
