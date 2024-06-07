@@ -12,8 +12,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<Balloon> balloons2;
     private ArrayList<Predator> predators;
     private ArrayList<Predator> predators2;
-    private ArrayList<Predator> bullets;
-    private ArrayList<Predator> bullets2;
+    private ArrayList<Bullet> bullets;
+    private ArrayList<Bullet> bullets2;
     private BufferedImage background;
     private BufferedImage bullet;
     private Timer timer;
@@ -26,6 +26,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<InvisibleRect> invisibleRects2;
     private ArrayList<PredatorButton> predatorButtons;
     private int predatorNumDragged;
+    private int timeBetweenBalloons;
+    private int timeBetweenBalloons2;
     private int numBalloonsPerRound;
     private int balloonSpawned;
     private int balloonSpawned2;
@@ -107,6 +109,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         predators = new ArrayList<>();
         predators2 = new ArrayList<>();
 
+        bullets = new ArrayList<>();
+        bullets2 = new ArrayList<>();
+
         p1 = new Player("Player 1");
         p2 = new Player("Player 2");
 
@@ -171,9 +176,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             g.drawImage(button.getImage(), button.getX(), button.getY(), null);
         }
 
+        //gets index of predators who can shoot ( their distance is 200 or less from a balloon)
+        //also gets index of balloon they correspond to
+
         ArrayList<Integer> b1Shoots = new ArrayList<>();
         ArrayList<Integer> b2Shoots = new ArrayList<>();
         ArrayList<Integer> slopes = new ArrayList<>();
+        ArrayList<Integer> slopes2 = new ArrayList<>();
         ArrayList<Integer> p1Shoots = new ArrayList<>();
         ArrayList<Integer> p2Shoots = new ArrayList<>();
         double distance;
@@ -203,11 +212,15 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             }
             int horizontal = 58;
             int vertical = 36;
-            for (int x = 0; x < p1Shoots.size(); x++) {
-                g.drawImage(bullet, predators.get(p1Shoots.get(x)).getX() + horizontal, predators.get(p1Shoots.get(x)).getY() + vertical, null);
+            for (int x = 0; x < bullets.size(); x++) {
+                g.drawImage(bullet, bullets.get(x).getX(), bullets.get(x).getY(), null);
                 //over here there will be code to make predators shoot a ball-shaped bullet
-                horizontal ++;
-                vertical++;
+
+                //ADD A FUNCTION THAT SAYS IF BULLETS LOCATION GREATER THAN X OR Y OF BACKGROUND, RESET ITS LOCATION TO ITS ORIginal
+                //so reset the location bak to p1Shoots.get(x).getX() + 56;
+
+                bullets.get(x).setX(bullets.get(x).getX()+1);
+                bullets.get(x).setY(bullets.get(x).getY()+ slopes.get(x));
                 //go to mouse released method
 
             }
@@ -231,7 +244,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
             for (int x = 0; x < p2Shoots.size(); x++) {
-                g.drawImage(background, 0, 0, null);
+                System.out.println("works2");
                 //over here there will be code to make predators shoot a ball-shaped bullet
             }
         }
@@ -242,7 +255,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         }
     }
 
-    //gets index of predators who can shoot ( their distance is 200 or less from a balloon)
+
 
 
 
@@ -262,7 +275,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             i++;
         }
     }
-    //ADD BULLETS TO BULLET LIST AFTER PREDATOR ADDED
     public void mouseReleased(MouseEvent e) {
         if (predatorNumDragged >= 0) {
             ArrayList<BufferedImage> animalFrames = pig2Frames;
@@ -340,16 +352,19 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         if (predatorNumDragged >= 3) {
             rightSide = false;
         }
+        //each predator is assigned its own bullet with its own locations
 
         if (x <= 550 && rightSide) {
             if (p1.getMoney() >= 400) {
                 predators.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
                 p1.loseMoney(400);
+                bullets.add(new Bullet(predators.get(predators.size()-1).getX() + 58, predators.get(predators.size()-1).getY() + 36));
             }
         } else if (x >= 615 && !rightSide) {
             if (p2.getMoney() >= 400) {
                 predators2.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 300));
                 p2.loseMoney(400);
+                bullets2.add(new Bullet(predators2.get(predators2.size()-1).getX() + 58, predators2.get(predators2.size()-1).getY() + 36));
             }
         }
 
