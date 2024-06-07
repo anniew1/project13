@@ -6,7 +6,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        money = 500;
+        money = 100000;
         hp = 1;
     }
 
