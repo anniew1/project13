@@ -13,7 +13,6 @@ public class Balloon extends Animation implements ActionListener {
     private Timer timer;
     private double time;
     Boolean leftSide;
-    private int numBalloonsPerRound;
 
     public Balloon(ArrayList<BufferedImage> frames, int delay, Boolean leftSide) {
         super(frames, delay);
