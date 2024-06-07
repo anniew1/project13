@@ -17,6 +17,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private BufferedImage background;
     private BufferedImage bullet;
     private Timer timer;
+    private Timer balloonTimer;
     private ArrayList<BufferedImage> pigFrames;
     private ArrayList<BufferedImage> balloonFrames;
     private ArrayList<BufferedImage> catFrames;
@@ -25,8 +26,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private ArrayList<InvisibleRect> invisibleRects2;
     private ArrayList<PredatorButton> predatorButtons;
     private int predatorNumDragged;
-    private int timeBetweenBalloons;
-    private int timeBetweenBalloons2;
     private int numBalloonsPerRound;
     private int balloonSpawned;
     private int balloonSpawned2;
@@ -81,6 +80,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         timer = new Timer(1000, this);
         timer.start();
 
+        balloonTimer = new Timer(10000, this);
+        balloonTimer.start();
+
         setFocusable(true);
         requestFocusInWindow();
 
@@ -121,23 +123,14 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
         g.drawImage(background, 0, 0, null);
 
-        // draws the players' money and hps
+        // draws the players' money
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.drawString("$" + p1.getMoney(), 25, 500);
         g.drawString("$" + p2.getMoney(), 1080, 500);
 
-        // spawns the balloons
-        if (timeBetweenBalloons >= 2 && balloonSpawned < numBalloonsPerRound) {
-            balloons.add(new Balloon(balloonFrames, 1, true));
-            timeBetweenBalloons = 0;
-            balloonSpawned++;
-        }
-
-        if (timeBetweenBalloons2 >= 2 && balloonSpawned2 < numBalloonsPerRound) {
-            balloons2.add(new Balloon(balloonFrames, 1, false));
-            timeBetweenBalloons2 = 0;
-            balloonSpawned2++;
-        }
+        // draws the players' hp
+        g.drawString("HP: " + p1.getHp(), 300, 50);
+        g.drawString("HP: " + p2.getHp(), 800, 50);
 
         // draws the predators
         for (Predator predator : predators) {
@@ -149,15 +142,28 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         }
 
         //moves the balloons
-        for (Balloon balloon : balloons) {
-            balloon.move();
-            g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
+        for (int i = 0; i < balloons.size(); i++) {
+            if (balloons.get(i).move()) {
+                p1.loseHp();
+                balloons.remove(i);
+                //if (i != 0) {
+                    i--;
+                //}
+            } else {
+                g.drawImage(balloons.get(i).getActiveFrame(), balloons.get(i).getX(), balloons.get(i).getY(), null);
+            }
         }
 
-        for (Balloon balloon : balloons2) {
-
-            balloon.move();
-            g.drawImage(balloon.getActiveFrame(), balloon.getX(), balloon.getY(), null);
+        for (int j = 0; j < balloons2.size(); j++) {
+            if (balloons2.get(j).move()) {
+                p2.loseHp();
+                balloons.remove(j);
+              //  if (j != 0) {
+                    j--;
+              //  }
+            } else {
+                g.drawImage(balloons2.get(j).getActiveFrame(), balloons2.get(j).getX(), balloons2.get(j).getY(), null);
+            }
         }
 
         // draws the buttons used to place predators
@@ -198,7 +204,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             int horizontal = 58;
             int vertical = 36;
             for (int x = 0; x < p1Shoots.size(); x++) {
-                System.out.println("works1");
                 g.drawImage(bullet, predators.get(p1Shoots.get(x)).getX() + horizontal, predators.get(p1Shoots.get(x)).getY() + vertical, null);
                 //over here there will be code to make predators shoot a ball-shaped bullet
                 horizontal ++;
@@ -226,7 +231,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
             for (int x = 0; x < p2Shoots.size(); x++) {
-                System.out.println("works2");
                 g.drawImage(background, 0, 0, null);
                 //over here there will be code to make predators shoot a ball-shaped bullet
             }
@@ -278,9 +282,17 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void mouseExited(MouseEvent e) {}
 
     public void actionPerformed (ActionEvent e) {
-        if (e.getSource() instanceof Timer) {
-            timeBetweenBalloons += 1;
-            timeBetweenBalloons2 += 1;
+        if (e.getSource() instanceof Timer balloonTimer) {
+            if (balloonSpawned < numBalloonsPerRound) {
+                System.out.println("hi");
+                balloons.add(new Balloon(balloonFrames, 1, true));
+                balloonSpawned++;
+            }
+
+            if (balloonSpawned2 < numBalloonsPerRound) {
+                balloons2.add(new Balloon(balloonFrames, 1, false));
+                balloonSpawned2++;
+            }
         }
     }
 
@@ -304,7 +316,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         for (InvisibleRect invisibleRect : invisibleRects) {
             g.drawRect(invisibleRect.getX(), invisibleRect.getY(), 20, 20);
             for (Balloon balloon : balloons) {
-                if (balloon.getRect().intersects(invisibleRect.getRect()) && balloon.getTime() >= 1.3) {
+                if (balloon.getRect().intersects(invisibleRect.getRect()) && balloon.getTime() >= 1.1) {
                     balloon.incrementTurnNum();
                     balloon.zeroTime();
                 }

@@ -27,7 +27,7 @@ public class Balloon extends Animation implements ActionListener {
         turnNum = 0;
         time = 0;
         timer = new Timer(1000, this);
-        timer.start();
+       // timer.start();
     }
 
     public int getX() {
@@ -46,20 +46,21 @@ public class Balloon extends Animation implements ActionListener {
         time = 0;
     }
 
-    public void move() {
+    public boolean move() {
         if (turnNum % 2 == 0) {
             incrementY();
         } else {
             incrementX();
         }
+        return checkOutside();
     }
 
     private void incrementX() {
         double moveValue;
         if (leftSide) {
-            moveValue = .5;
+            moveValue = .6;
         } else {
-            moveValue = -.5;
+            moveValue = -.6;
         }
         if ((turnNum < 3 || turnNum == 9)) {
             x += moveValue;
@@ -69,7 +70,7 @@ public class Balloon extends Animation implements ActionListener {
     }
 
     private void incrementY() {
-        y += .5;
+        y += .6;
     }
 
     public void incrementTurnNum() {
@@ -86,6 +87,13 @@ public class Balloon extends Animation implements ActionListener {
         if (e.getSource() instanceof Timer) {
             time += .01;
         }
+    }
+
+    private boolean checkOutside() {
+        if (y >= 600) {
+            return true;
+        }
+        return false;
     }
 
 }

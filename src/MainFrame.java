@@ -6,7 +6,6 @@ public class MainFrame implements ActionListener {
 
     private GraphicsPanel panel;
     private Timer timer;
-    private double time;
 
     public MainFrame(String name) {
         JFrame frame = new JFrame("Balloon Wars");
@@ -21,7 +20,6 @@ public class MainFrame implements ActionListener {
         // display the frame
         frame.setVisible(true);
 
-        time = 0;
         timer = new Timer(1, this);
         timer.start();
 
