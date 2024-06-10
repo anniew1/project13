@@ -219,7 +219,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                         bullets.get(x).setX(predators.get(p1Shoots.get(x)).getX() + 56);
                         bullets.get(x).setY(predators.get(p1Shoots.get(x)).getY() + 38);
                     }
-
+                    checkHit(bullets, balloons, p1);
                     bullets.get(x).setX(bullets.get(x).getX() + 1);
                     bullets.get(x).setY(bullets.get(x).getY() + slopes.get(x));
                     //go to mouse released method
@@ -243,7 +243,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                         }
                     }
                 }
-                for (int x = 0; x < p2Shoots.size(); x++) {
+                for (int x = 0; x < bullets2.size(); x++) {
                     g.drawImage(bullet, bullets2.get(x).getX(), bullets2.get(x).getY(), null);
                     //over here there will be code to make predators shoot a ball-shaped bullet
 
@@ -253,6 +253,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                         bullets2.get(x).setX(predators2.get(p1Shoots.get(x)).getX() + 56);
                         bullets2.get(x).setY(predators2.get(p1Shoots.get(x)).getY() + 38);
                     }
+                    checkHit(bullets2, balloons2, p2);
                     bullets2.get(x).setX(bullets2.get(x).getX() + 1);
                     bullets2.get(x).setY(bullets2.get(x).getY() + slopes.get(x));
                     //over here there will be code to make predators shoot a ball-shaped bullet
@@ -260,8 +261,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             }
 
             // checks to see if bullet collided with balloon and removes if it does
-            checkHit(bullets, balloons, p1);
-            checkHit(bullets2, balloons2, p2);
+//            checkHit(bullets, balloons, p1);
+//            checkHit(bullets2, balloons2, p2);
 
 
             // for dragging predators and placing them
@@ -428,8 +429,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 if (bulletList.get(i).getRect().intersects(balloonList.get(i).getRect())) {
                     balloonList.remove(j);
                     j--;
-                    bulletList.remove(i);
-                    i--;
                     player.addMoney();
                 }
             }
