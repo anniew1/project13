@@ -17,6 +17,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     private BufferedImage background;
     private BufferedImage bullet;
     private Timer balloonTimer;
+    private int time;
     private ArrayList<BufferedImage> pigFrames;
     private ArrayList<BufferedImage> balloonFrames;
     private ArrayList<BufferedImage> catFrames;
@@ -77,8 +78,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         balloons2 = new ArrayList<>();
         balloons2.add(new Balloon(balloonFrames, 1, false));
 
-        balloonTimer = new Timer(3000, this);
+        balloonTimer = new Timer(2000, this);
         balloonTimer.start();
+        time = 0;
 
         setFocusable(true);
         requestFocusInWindow();
@@ -144,6 +146,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
         g.setColor(Color.black);
         g.drawString(p1.getName(), 260, 25);
         g.drawString(p2.getName(), 810, 25);
+
+        // draws the time
+        g.drawString("Time: " + time, 530, 50);
 
         // draws the predators
         for (Predator predator : predators) {
@@ -254,6 +259,11 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 }
             }
 
+            // checks to see if bullet collided with balloon and removes if it does
+            checkHit(bullets, balloons, p1);
+            checkHit(bullets2, balloons2, p2);
+
+
             // for dragging predators and placing them
             if (predatorNumDragged >= 0) {
                 g.drawImage(predatorButtons.get(predatorNumDragged).getImage(), MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 400, null);
@@ -317,6 +327,12 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                 if (balloonSpawned2 < numBalloonsPerRound) {
                     balloons2.add(new Balloon(balloonFrames, 1, false));
                     balloonSpawned2++;
+                }
+                time += 2;
+
+                if (time % 30 == 0) {
+                    balloonSpawned = 0;
+                    balloonSpawned2 = 0;
                 }
             }
         }
@@ -401,6 +417,21 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
             if (lose) {
                 winner = opposite;
+            }
+        }
+    }
+
+    // checks to see if bullet collides with balloon
+    public void checkHit(ArrayList<Bullet> bulletList, ArrayList<Balloon> balloonList, Player player) {
+        for (int i = 0; i < bulletList.size(); i++) {
+            for (int j = 0; j < balloonList.size(); j++) {
+                if (bulletList.get(i).getRect().intersects(balloonList.get(i).getRect())) {
+                    balloonList.remove(j);
+                    j--;
+                    bulletList.remove(i);
+                    i--;
+                    player.addMoney();
+                }
             }
         }
     }

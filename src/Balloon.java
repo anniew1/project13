@@ -1,8 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Balloon extends Animation implements ActionListener {
@@ -26,7 +29,6 @@ public class Balloon extends Animation implements ActionListener {
         turnNum = 0;
         time = 0;
         timer = new Timer(1000, this);
-       // timer.start();
     }
 
     public int getX() {
@@ -94,6 +96,7 @@ public class Balloon extends Animation implements ActionListener {
         }
         return false;
     }
+
 
 }
 
