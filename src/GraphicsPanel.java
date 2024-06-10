@@ -250,8 +250,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                     //ADD A FUNCTION THAT SAYS IF BULLETS LOCATION GREATER THAN X OR Y OF BACKGROUND, RESET ITS LOCATION TO ITS ORIginal
                     //so reset the location bak to p1Shoots.get(x).getX() + 56;
                     if(bullets2.get(x).getX() < 583 || bullets2.get(x).getY() < 0 ||bullets2.get(x).getX() > 1083){
-                        bullets2.get(x).setX(predators2.get(p1Shoots.get(x)).getX() + 56);
-                        bullets2.get(x).setY(predators2.get(p1Shoots.get(x)).getY() + 38);
+                        bullets2.get(x).setX(predators2.get(p2Shoots.get(x)).getX() + 56);
+                        bullets2.get(x).setY(predators2.get(p2Shoots.get(x)).getY() + 38);
                     }
                     checkHit(bullets2, balloons2, p2);
                     bullets2.get(x).setX(bullets2.get(x).getX() - 1);

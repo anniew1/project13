@@ -6,7 +6,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
-        money = 100000;
+        money = 400;
         hp = 10;
     }
 
@@ -27,7 +27,7 @@ public class Player {
     }
 
     public void addMoney() {
-        money += 30;
+        money += 50;
     }
 
     public Boolean loseHp() {
