@@ -221,7 +221,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                     }
                     checkHit(bullets, balloons, p1);
                     bullets.get(x).setX(bullets.get(x).getX() + 1);
-                    bullets.get(x).setY(bullets.get(x).getY() + slopes.get(x));
+                    bullets.get(x).setY(bullets.get(x).getY() - 1);
                     //go to mouse released method
 
                 }
@@ -254,8 +254,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                         bullets2.get(x).setY(predators2.get(p1Shoots.get(x)).getY() + 38);
                     }
                     checkHit(bullets2, balloons2, p2);
-                    bullets2.get(x).setX(bullets2.get(x).getX() + 1);
-                    bullets2.get(x).setY(bullets2.get(x).getY() + slopes.get(x));
+                    bullets2.get(x).setX(bullets2.get(x).getX() - 1);
+                    bullets2.get(x).setY(bullets2.get(x).getY() - 1); //slopes.get(x)
                     //over here there will be code to make predators shoot a ball-shaped bullet
                 }
             }
