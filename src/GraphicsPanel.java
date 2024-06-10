@@ -426,7 +426,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
     public void checkHit(ArrayList<Bullet> bulletList, ArrayList<Balloon> balloonList, Player player) {
         for (int i = 0; i < bulletList.size(); i++) {
             for (int j = 0; j < balloonList.size(); j++) {
-                System.out.println(balloonList.get(j).getX());
                 if (bulletList.get(i).getRect().intersects(balloonList.get(j).getRect())) {
                     balloonList.remove(j);
                     j--;
