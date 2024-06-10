@@ -190,7 +190,11 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                         x2 = pred.getX();
                         y2 = pred.getY();
                         distance = Math.sqrt((double) ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
-                        slope = (x2 - x1) / (y2 - y1);
+                        slope = (x2-x1);
+                        int sub = y2-y1;
+                        if(sub!= 0){
+                            slope/=sub;
+                        }
                         if (distance <= 150) {
                             slopes.add(slope);
                             p1Shoots.add(j);
@@ -206,6 +210,10 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
 
                     //ADD A FUNCTION THAT SAYS IF BULLETS LOCATION GREATER THAN X OR Y OF BACKGROUND, RESET ITS LOCATION TO ITS ORIginal
                     //so reset the location bak to p1Shoots.get(x).getX() + 56;
+                    if(bullets.get(x).getX() > 583 || bullets.get(x).getY() < 0){
+                        bullets.get(x).setX(predators.get(p1Shoots.get(x)).getX() + 56);
+                        bullets.get(x).setY(predators.get(p1Shoots.get(x)).getY() + 38);
+                    }
 
                     bullets.get(x).setX(bullets.get(x).getX() + 1);
                     bullets.get(x).setY(bullets.get(x).getY() + slopes.get(x));
@@ -231,7 +239,17 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
                     }
                 }
                 for (int x = 0; x < p2Shoots.size(); x++) {
-                    System.out.println("works2");
+                    g.drawImage(bullet, bullets2.get(x).getX(), bullets2.get(x).getY(), null);
+                    //over here there will be code to make predators shoot a ball-shaped bullet
+
+                    //ADD A FUNCTION THAT SAYS IF BULLETS LOCATION GREATER THAN X OR Y OF BACKGROUND, RESET ITS LOCATION TO ITS ORIginal
+                    //so reset the location bak to p1Shoots.get(x).getX() + 56;
+                    if(bullets2.get(x).getX() < 583 || bullets2.get(x).getY() < 0 ||bullets2.get(x).getX() > 1083){
+                        bullets2.get(x).setX(predators2.get(p1Shoots.get(x)).getX() + 56);
+                        bullets2.get(x).setY(predators2.get(p1Shoots.get(x)).getY() + 38);
+                    }
+                    bullets2.get(x).setX(bullets2.get(x).getX() + 1);
+                    bullets2.get(x).setY(bullets2.get(x).getY() + slopes.get(x));
                     //over here there will be code to make predators shoot a ball-shaped bullet
                 }
             }
