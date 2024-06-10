@@ -394,7 +394,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, ActionListen
             }
         } else if (x >= 615 && !rightSide) {
             if (p2.getMoney() >= 400) {
-                predators2.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y));
+                predators2.add(new Predator(animalFrames, MouseInfo.getPointerInfo().getLocation().x - 400, MouseInfo.getPointerInfo().getLocation().y - 400));
                 p2.loseMoney(400);
                 bullets2.add(new Bullet(predators2.get(predators2.size() - 1).getX() + 58, predators2.get(predators2.size() - 1).getY() + 36));
             }
