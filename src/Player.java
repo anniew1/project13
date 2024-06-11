@@ -27,7 +27,7 @@ public class Player {
     }
 
     public void addMoney() {
-        money += 50;
+        money += 30;
     }
 
     public Boolean loseHp() {
